@@ -25,11 +25,13 @@ AuthorSchema.virtual('lifespan').get(function () {
     )
   }
   lifetime_string += ' - '
+
   if (this.date_of_death) {
     lifetime_string += DateTime.fromJSDate(this.date_of_death).toLocaleString(
       DateTime.DATE_MED
     )
   }
+  console.log(this.date_of_death)
   return lifetime_string
 })
 
