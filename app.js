@@ -1,27 +1,28 @@
-const createError = require('http-errors')
-const express = require('express')
-const path = require('path')
-const cookieParser = require('cookie-parser')
-const logger = require('morgan')
+var createError = require('http-errors')
+var express = require('express')
+var path = require('path')
+var cookieParser = require('cookie-parser')
+var logger = require('morgan')
 
-const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
-var catalogRouter = require('./routes/catalog')
+var indexRouter = require('./routes/index')
+var usersRouter = require('./routes/users')
 
-const app = express()
+var app = express()
 
 require('dotenv').config()
 
-//Mongoose setup
-const mongoose = require('mongoose')
+// Mongoose connection
+var mongoose = require('mongoose')
 
-const mongoDB = process.env.MONGO_URI
+var mongoDB = process.env.DB_CONNECTION
+
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 
-const db = mongoose.connection
+var db = mongoose.connection
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
-db.on('open', (err, doc) => console.log('Connection established with database'))
+db.on('error', console.error.bind(console, 'MongoDB connection error'))
+
+mongoose.connection.readyState === 2 ? console.log('MongoDB connected') : ''
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -35,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/catalog', catalogRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
