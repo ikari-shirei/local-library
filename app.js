@@ -18,7 +18,7 @@ require('dotenv').config()
 // Mongoose connection
 var mongoose = require('mongoose')
 
-var mongoDB = process.env.DB_CONNECTION
+var mongoDB = process.env.DB_CONNECTION || dev_db_url
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 
