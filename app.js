@@ -8,6 +8,9 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var catalogRouter = require('./routes/catalog')
 
+var compression = require('compression')
+var helmet = require('helmet')
+
 var app = express()
 
 require('dotenv').config()
@@ -15,7 +18,7 @@ require('dotenv').config()
 // Mongoose connection
 var mongoose = require('mongoose')
 
-var mongoDB = process.env.DB_CONNECTION
+var mongoDB = process.env.DB_CONNECTION || dev_db_url
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -34,6 +37,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.use(compression())
+app.use(helmet())
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
